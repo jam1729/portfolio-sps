@@ -26,3 +26,15 @@ function addRandomGreeting() {
   const greetingContainer = document.getElementById('greeting-container');
   greetingContainer.innerText = greeting;
 }
+
+function darkMode() {
+  var element = document.body;
+  element.classList.toggle("dark-mode");
+  const modeToggle = document.getElementById('modeToggle');
+  if(modeToggle.innerText == "Dark"){
+    modeToggle.innerText = "Light";
+  }
+  else{
+    modeToggle.innerText = "Dark";
+  }
+}
