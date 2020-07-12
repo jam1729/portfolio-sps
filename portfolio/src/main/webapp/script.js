@@ -29,7 +29,7 @@ function addRandomGreeting() {
 
 function darkMode() {
   var element = document.body;
-  element.classList.toggle("dark-mode");
+  element.classList.toggle("light-mode");
   const modeToggle = document.getElementById('modeToggle');
   if(modeToggle.innerText == "Dark"){
     modeToggle.innerText = "Light";
@@ -37,4 +37,12 @@ function darkMode() {
   else{
     modeToggle.innerText = "Dark";
   }
+}
+
+async function getDetails() {
+  const response = await fetch('/data');
+  const detail = await response.text();
+  console.log(response);
+  console.log(detail);
+  document.getElementById('details-json').innerText = detail;
 }
