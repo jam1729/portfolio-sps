@@ -39,65 +39,20 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 
 
-@WebServlet("/data")
-public class DataServlet extends HttpServlet {
+@WebServlet("/list")
+public class ListServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    
-    String url = "https://codeforces.com/api/user.info?handles=jam1729";
-    
-    HttpClient client = new DefaultHttpClient();
-    HttpGet req = new HttpGet(url);
-    HttpResponse res = client.execute(req);
-    
-    BufferedReader rd = new BufferedReader
-    (new InputStreamReader(
-    res.getEntity().getContent()));
 
-    String line = "";
-    response.setContentType("text/html;");
-
-    while ((line = rd.readLine()) != null) {
-      response.getWriter().println(line);
-    }
-    
-  }
-
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-    String text = getParameter(request, "handle", "");
-    
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Entity userEntity = new Entity("User");
-    userEntity.setProperty("handle", text);
-    datastore.put(userEntity);
-
-    String url = "https://codeforces.com/api/user.info?handles=" + text;
+    Query query = new Query("User");
+    PreparedQuery results = datastore.prepare(query);
     
-    HttpClient client = new DefaultHttpClient();
-    HttpGet req = new HttpGet(url);
-    HttpResponse res = client.execute(req);
-    
-    BufferedReader rd = new BufferedReader
-    (new InputStreamReader(
-    res.getEntity().getContent()));
-
-    String line = "";
-    response.setContentType("text/html;");
-
-    while ((line = rd.readLine()) != null) {
-      response.getWriter().println(line);
+    for (Entity entity : results.asIterable()) {
+      String handle = (String) entity.getProperty("handle");
+      response.getWriter().println(handle);
     }
-    
-  }
 
-  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
-    String value = request.getParameter(name);
-    if (value == null) {
-      return defaultValue;
-    }
-    return value;
   }
 }

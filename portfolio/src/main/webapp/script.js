@@ -47,4 +47,11 @@ async function getDetails() {
   document.getElementById('details-json').innerText = detail;
 }
 
+async function getList() {
+  const response = await fetch('/list');
+  const detail = await response.text();
+  console.log(response);
+  console.log(detail);
+  document.getElementById('get-list').innerText = detail;
+}
 
