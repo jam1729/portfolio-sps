@@ -21,10 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /* Added */
-// import org.apache.httpcomponents.httpclient.*;
-// import org.apache.httpcomponents.httpclient.methods.*;
-// import org.apache.httpcomponents.httpclient.params.HttpMethodParams;
-
+import com.google.gson.Gson;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -63,5 +60,37 @@ public class DataServlet extends HttpServlet {
       response.getWriter().println(line);
     }
     
+  }
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+    String text = getParameter(request, "handle", "");
+    
+
+    String url = "https://codeforces.com/api/user.info?handles=" + text;
+    
+    HttpClient client = new DefaultHttpClient();
+    HttpGet req = new HttpGet(url);
+    HttpResponse res = client.execute(req);
+    
+    BufferedReader rd = new BufferedReader
+    (new InputStreamReader(
+    res.getEntity().getContent()));
+
+    String line = "";
+    response.setContentType("text/html;");
+
+    while ((line = rd.readLine()) != null) {
+      response.getWriter().println(line);
+    }
+  }
+
+  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
+    String value = request.getParameter(name);
+    if (value == null) {
+      return defaultValue;
+    }
+    return value;
   }
 }

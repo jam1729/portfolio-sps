@@ -38,7 +38,6 @@ function darkMode() {
     modeToggle.innerText = "Dark";
   }
 }
-<<<<<<< HEAD
 
 async function getDetails() {
   const response = await fetch('/data');
@@ -47,5 +46,5 @@ async function getDetails() {
   console.log(detail);
   document.getElementById('details-json').innerText = detail;
 }
-=======
->>>>>>> origin
+
+

@@ -16,7 +16,11 @@
       <button onclick="darkMode()" id="modeToggle" >Light</button>
       <button onclick="getDetails()">Get Details</button>
       <div id='details-json'></div>
-      <!-- <div id="greeting-container"></div> -->
+      <form action='/data' method='post'>
+        <p>Enter Handle</p>
+        <input name="handle" type="text"></input>
+        <button type="submit" >Submit</button>
+      </form>
     </div>
     <marquee scrollamount="30" direction="left" behavior="scroll">
       <img src="https://media.giphy.com/media/CV61LRKyQf6P6/giphy.gif" />
