@@ -7,14 +7,23 @@
     <script src="script.js"></script>
   </head>
   <body>
-    <h1 class="fontBosk">SREERAMJI K S</h1>
-    <div>
+    <div class="typewriter">
+      <h1 class="fontBosk">SREERAMJI K S</h1>
       <p>Hello! You can call me jam! :)</p>
       <p>3rd year B.Tech at Amrita University</p>
       <p>Want to discuss some algo? I'm in!</p>
       <p>Click here to toggle between Light and Dark modes:</p>
-      <button onclick="darkMode()" id="modeToggle" >Dark</button>
-      <!-- <div id="greeting-container"></div> -->
+      <button onclick="darkMode()" id="modeToggle" >Light</button>
+      <button onclick="getDetails()">Get Details</button>
+      <div id='details-json'></div>
+      <form action='/data' method='post'>
+        <p>Enter Handle</p>
+        <input name="handle" type="text"></input>
+        <button type="submit" >Submit</button>
+      </form>
     </div>
+    <marquee scrollamount="30" direction="left" behavior="scroll">
+      <img src="https://media.giphy.com/media/CV61LRKyQf6P6/giphy.gif" />
+    </marquee>
   </body>
 </html>
