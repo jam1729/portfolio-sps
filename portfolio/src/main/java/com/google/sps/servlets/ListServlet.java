@@ -14,45 +14,47 @@
 
 package com.google.sps.servlets;
 
-import java.io.IOException;
+import com.google.appengine.api.datastore.*;
+
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import java.io.*;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.SortDirection;
-
+import java.io.IOException;
+import java.util.Vector;
 
 @WebServlet("/list")
 public class ListServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    UserService userService = UserServiceFactory.getUserService();
+    if (userService.isUserLoggedIn()) {
+      String userEmail = userService.getCurrentUser().getEmail();
+      String urlToRedirectToAfterUserLogsOut = "/";
+      String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
+      response.getWriter().println("<p>Hello " + userEmail + "!</p>");
 
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Query query = new Query("User");
-    PreparedQuery results = datastore.prepare(query);
-    
-    for (Entity entity : results.asIterable()) {
-      String handle = (String) entity.getProperty("handle");
-      response.getWriter().println(handle);
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      Query query = new Query("User");
+      PreparedQuery results = datastore.prepare(query);
+
+      Vector handles = new Vector();
+      for (Entity entity : results.asIterable()) {
+        String handle = (String) entity.getProperty("handle");
+        handles.add(handle);
+      }
+      response.getWriter().println(handles.toString());
+
+      response.getWriter().println("<p>Logout <a href=\"" + logoutUrl + "\">here</a>.</p>");
     }
+    else {
+      String urlToRedirectToAfterUserLogsIn = "/";
+      String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
 
+      response.getWriter().println("<p>Login <a href=\"" + loginUrl + "\">here</a>.</p>");
+    }
   }
 }

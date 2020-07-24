@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <title>My Portfolio</title>
     <link rel="stylesheet" href="style.css">
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyArd-C7V3dRpEVoeccFJcsTnAtOMA5xCj0"></script>
     <script src="script.js"></script>
   </head>
-  <body>
+  <body onload="genMap();">
     <div class="typewriter">
       <h1 class="fontBosk">SREERAMJI K S</h1>
       <p>Hello! You can call me jam! :)</p>
@@ -18,13 +19,18 @@
       <div id='details-json'></div>
       <form action='/data' method='post'>
         <p>Enter Handle</p>
-        <input name="handle" type="text"></input>
+        <input name="handle" type="text"/>
         <button type="submit" >Submit</button>
       </form>
       <p>Get user history list</p>
       <button onclick="getList()">List</button>
-      <div id='get-list'></div> 
+      <div id='get-list'></div>
+      <p>Current Location</p>
+      <div id="lat"></div>
+      <div id="lng"></div>
+      <div style="width:100%; height:100%;" id="map"></div>
     </div>
+
     <marquee scrollamount="30" direction="left" behavior="scroll">
       <img src="https://media.giphy.com/media/CV61LRKyQf6P6/giphy.gif" />
     </marquee>
