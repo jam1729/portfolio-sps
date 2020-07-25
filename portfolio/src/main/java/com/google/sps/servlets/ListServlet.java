@@ -14,10 +14,11 @@
 
 package com.google.sps.servlets;
 
+import com.google.gson.Gson;
 import com.google.appengine.api.datastore.*;
-
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -46,7 +47,10 @@ public class ListServlet extends HttpServlet {
         String handle = (String) entity.getProperty("handle");
         handles.add(handle);
       }
-      response.getWriter().println(handles.toString());
+
+      Gson gson = new Gson();
+      response.setContentType("application/json;");
+      response.getWriter().println(gson.toJson(handles));
 
       response.getWriter().println("<p>Logout <a href=\"" + logoutUrl + "\">here</a>.</p>");
     }
