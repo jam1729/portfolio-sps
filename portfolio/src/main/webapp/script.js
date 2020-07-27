@@ -44,7 +44,7 @@ async function getDetails() {
 
 async function getList() {
   const response = await fetch('/list');
-  let detail = await response.text();
+  const detail = await response.text();
   console.log(response);
   console.log(detail);
   document.getElementById('get-list').innerHTML = detail;
