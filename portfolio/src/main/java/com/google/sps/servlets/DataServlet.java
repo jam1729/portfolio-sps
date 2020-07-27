@@ -14,30 +14,28 @@
 
 package com.google.sps.servlets;
 
-import java.io.IOException;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    
     String url = "https://codeforces.com/api/user.info?handles=jam1729";
-    
     HttpClient client = new DefaultHttpClient();
     HttpGet req = new HttpGet(url);
     HttpResponse res = client.execute(req);
@@ -48,18 +46,19 @@ public class DataServlet extends HttpServlet {
 
     String line = "";
     response.setContentType("text/html;");
-
     while ((line = rd.readLine()) != null) {
       response.getWriter().println(line);
     }
-    
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
     String text = getParameter(request, "handle", "");
     
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Entity userEntity = new Entity("User");
+    userEntity.setProperty("handle", text);
+    datastore.put(userEntity);
 
     String url = "https://codeforces.com/api/user.info?handles=" + text;
     
@@ -73,7 +72,6 @@ public class DataServlet extends HttpServlet {
 
     String line = "";
     response.setContentType("text/html;");
-
     while ((line = rd.readLine()) != null) {
       response.getWriter().println(line);
     }

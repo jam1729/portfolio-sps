@@ -31,12 +31,7 @@ function darkMode() {
   var element = document.body;
   element.classList.toggle("light-mode");
   const modeToggle = document.getElementById('modeToggle');
-  if(modeToggle.innerText == "Dark"){
-    modeToggle.innerText = "Light";
-  }
-  else{
-    modeToggle.innerText = "Dark";
-  }
+  modeToggle.innerText = modeToggle.innerText === "Dark" ? "Light" : "Dark";
 }
 
 async function getDetails() {
@@ -47,4 +42,36 @@ async function getDetails() {
   document.getElementById('details-json').innerText = detail;
 }
 
+async function getList() {
+  const response = await fetch('/list');
+  const detail = await response.text();
+  console.log(response);
+  console.log(detail);
+  document.getElementById('get-list').innerHTML = detail;
+}
 
+function genMap()
+{
+  if( navigator.geolocation ) {
+    navigator.geolocation.getCurrentPosition( success, fail );
+  }
+  else {
+    alert("Sorry, your browser does not support geolocation services.");
+  }
+}
+
+function success(position)
+{
+  const lng = position.coords.longitude;
+  const lat = position.coords.latitude;
+  document.getElementById('lat').innerHTML = lat.toString(10);
+  document.getElementById('lng').innerHTML = lng.toString(10);
+  const map = new google.maps.Map(
+      document.getElementById('map'),
+      {center: {lat: lat, lng: lng}, zoom: 16});
+}
+
+function fail()
+{
+  alert("Failed to load location information.");
+}
